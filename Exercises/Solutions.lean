@@ -118,3 +118,80 @@ lemma inverse_of_invertible {f : ℕ → ℕ}
 Proving in Lean:
 Common proof strategies
 -/
+
+/- Proof by cases -/
+
+-- use abs_eq_self, abs_eq_neg_self, le_of_lt
+lemma abs_elem (n : ℤ) : |n| = n ∨ |n| = -n := by
+  by_cases n ≥ 0
+  case pos h =>
+    left
+    apply abs_eq_self.mpr
+    exact h
+  case neg h =>
+    right
+    apply abs_eq_neg_self.mpr
+    push_neg at h
+    apply le_of_lt
+    exact h
+
+/- Proof by contradiction -/
+
+-- hint: derive contradiction from true = false
+lemma cert_nontriv {f : (ℕ → Bool) → Bool}
+  (h₀ : ∃ x, f x = true) (h₁ : ∃ x, f x = false)
+  {x : ℕ → Bool} {S : Set ℕ}
+  (hcert : ∀ y : ℕ → Bool, (∀ n ∈ S, y n = x n) → f y = f x) :
+  ∃ n, n ∈ S := by
+  by_contra! h
+  obtain ⟨x₀, hx₀⟩ := h₀
+  obtain ⟨x₁, hx₁⟩ := h₁
+  have h₁ : f x = true := by
+    rw [←hx₀]; symm
+    apply hcert
+    intro n hn
+    have := h n
+    contradiction
+  have h₂ : f x = false := by
+    rw [←hx₁]; symm
+    apply hcert
+    intro n hn
+    have := h n
+    contradiction
+  rw [h₁] at h₂
+  contradiction
+
+/- Proof by induction -/
+
+def has_period (f : ℕ → ℕ) (r : ℕ) :=
+  ∀ n, f (n + r) = f n
+
+/-
+ - Following lemmas might be useful:
+ - Nat.add_one_mul states (a + 1) * b = a * b + b
+ - add_assoc is associativity of addition
+-/
+lemma periodicity {f r} (hf : has_period f r) :
+  ∀ m, has_period f (m*r) := by
+  intro m
+  induction m
+  case zero =>
+    intro n
+    simp
+  case succ m ih =>
+    intro n
+    rw [Nat.add_one_mul, ←add_assoc, hf, ih]
+
+/- Calculations -/
+
+-- use gcongr and Finset.sum_const
+lemma sum_one {n : ℕ} {f : ℕ → ℕ} (hf : ∀ x, f x ≥ 1) :
+  ∑ i ∈ Finset.range n, f i ≥ n := by
+  calc
+    ∑ i ∈ Finset.range n, f i ≥ ∑ i ∈ Finset.range n, 1 := by
+      gcongr with i
+      apply hf
+    _ = (Finset.range n).card * 1 := by
+      apply Finset.sum_const
+    _ = n := by
+      simp

@@ -65,3 +65,40 @@ lemma inverse_of_invertible {f : ℕ → ℕ}
 Proving in Lean:
 Common proof strategies
 -/
+
+/- Proof by cases -/
+
+-- use abs_eq_self, abs_eq_neg_self, le_of_lt
+lemma abs_elem (n : ℤ) : |n| = n ∨ |n| = -n := by
+  sorry
+
+/- Proof by contradiction -/
+
+-- hint: derive contradiction from true = false
+lemma cert_nontriv {f : (ℕ → Bool) → Bool}
+  (h₀ : ∃ x, f x = true) (h₁ : ∃ x, f x = false)
+  {x : ℕ → Bool} {S : Set ℕ}
+  (hcert : ∀ y : ℕ → Bool, (∀ n ∈ S, y n = x n) → f y = f x) :
+  ∃ n, n ∈ S := by
+  sorry
+
+/- Proof by induction -/
+
+def has_period (f : ℕ → ℕ) (r : ℕ) :=
+  ∀ n, f (n + r) = f n
+
+/-
+ - Following lemmas might be useful:
+ - Nat.add_one_mul states (a + 1) * b = a * b + b
+ - add_assoc is associativity of addition
+-/
+lemma periodicity {f r} (hf : has_period f r) :
+  ∀ m, has_period f (m*r) := by
+  sorry
+
+/- Calculations -/
+
+-- use gcongr and Finset.sum_const
+lemma sum_one {n : ℕ} {f : ℕ → ℕ} (hf : ∀ x, f x ≥ 1) :
+  ∑ i ∈ Finset.range n, f i ≥ n := by
+sorry
