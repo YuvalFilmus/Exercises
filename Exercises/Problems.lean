@@ -33,6 +33,7 @@ lemma XOR_equiv :
 
 end section
 
+-- hint: rfl can prove 0 ≤ 0
 lemma nonzero_of_pos {n : ℤ} (hn : n > 0) : n ≠ 0 := by
   sorry
 
@@ -98,7 +99,38 @@ lemma periodicity {f r} (hf : has_period f r) :
 
 /- Calculations -/
 
+lemma diameter_of_radius {X : Type _} {d : X → X → ℝ}
+  (symm : ∀ x y, d x y = d y x)
+  (triangle : ∀ x y z, d x z ≤ d x y + d y z)
+  {p : X} {S : Set X} {r : ℝ} (hp : ∀ x ∈ S, d p x ≤ r) :
+  ∀ x ∈ S, ∀ y ∈ S, d x y ≤ 2*r := by
+  sorry
+
 -- use gcongr and Finset.sum_const
 lemma sum_one {n : ℕ} {f : ℕ → ℕ} (hf : ∀ x, f x ≥ 1) :
   ∑ i ∈ Finset.range n, f i ≥ n := by
-sorry
+  sorry
+
+/- Longer proofs -/
+
+-- try to use tactics such as rw, simp, assumption, linarith, omega
+open Finset in
+lemma exists_finset (S : Finset ℕ) {k : ℕ} (hk : k ≤ #S) :
+  ∃ T ⊆ S, #T = k := by
+  set n := #S with ←hn
+  rw [←hn] at hk
+  revert hn
+  induction n generalizing S k
+  case zero =>
+    sorry
+  case succ n' ih =>
+    intro hS
+    by_cases k = n' + 1
+    case pos hk' =>
+      sorry
+    case neg hk' =>
+      have : S.Nonempty := by
+        sorry
+      obtain ⟨x, hx⟩ := this
+      set S' := S.erase x with hS'
+      sorry -- Finset.card_erase_of_mem could be useful here

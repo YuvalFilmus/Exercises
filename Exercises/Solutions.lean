@@ -184,6 +184,18 @@ lemma periodicity {f r} (hf : has_period f r) :
 
 /- Calculations -/
 
+lemma diameter_of_radius {X : Type _} {d : X → X → ℝ}
+  (symm : ∀ x y, d x y = d y x)
+  (triangle : ∀ x y z, d x z ≤ d x y + d y z)
+  {p : X} {S : Set X} {r : ℝ} (hp : ∀ x ∈ S, d p x ≤ r) :
+  ∀ x ∈ S, ∀ y ∈ S, d x y ≤ 2*r := by
+  intro x hx y hy
+  calc
+    d x y ≤ d x p + d p y := by apply triangle
+    _ = d p x + d p y := by rw [symm]
+    _ ≤ r + r := by gcongr <;> (apply hp ; assumption)
+    _ = 2*r := by ring
+
 -- use gcongr and Finset.sum_const
 lemma sum_one {n : ℕ} {f : ℕ → ℕ} (hf : ∀ x, f x ≥ 1) :
   ∑ i ∈ Finset.range n, f i ≥ n := by
@@ -195,3 +207,50 @@ lemma sum_one {n : ℕ} {f : ℕ → ℕ} (hf : ∀ x, f x ≥ 1) :
       apply Finset.sum_const
     _ = n := by
       simp
+
+/- Longer proofs -/
+
+open Finset in
+lemma exists_finset (S : Finset ℕ) {k : ℕ} (hk : k ≤ #S) :
+  ∃ T ⊆ S, #T = k := by
+  set n := #S with ←hn
+  rw [←hn] at hk
+  revert hn
+  induction n generalizing S k
+  case zero =>
+    intro hS
+    use ∅
+    constructor
+    · simp
+    · simp; linarith
+  case succ n' ih =>
+    intro hS
+    by_cases k = n' + 1
+    case pos hk' =>
+      use S
+      constructor
+      · simp
+      · linarith
+    case neg hk' =>
+      have : S.Nonempty := by
+        apply card_pos.mp
+        linarith
+      obtain ⟨x, hx⟩ := this
+      set S' := S.erase x with hS'
+      have : ∃ T ⊆ S', #T = k := by
+        apply ih
+        · rw [hS']
+          simp [S.card_erase_of_mem hx]
+          omega
+        · rw [hS']
+          simp [S.card_erase_of_mem hx]
+          omega
+      obtain ⟨T, hT⟩ := this
+      use T
+      constructor
+      · trans S'
+        exact hT.1
+        intro i hi
+        simp [hS'] at hi
+        exact hi.2
+      · exact hT.2
