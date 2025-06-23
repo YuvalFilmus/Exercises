@@ -31,6 +31,10 @@ lemma XOR_equiv :
   ((A ∧ ¬ B) ∨ (B ∧ ¬ A)) ↔ ((A ∨ B) ∧ (¬ A ∨ ¬ B)) := by
   sorry
 
+lemma MAJ_equiv :
+  ((A ∧ B) ∨ (A ∧ C) ∨ (B ∧ C)) ↔ ((A ∨ B) ∧ (A ∨ C) ∧ (B ∨ C)) := by
+  sorry
+
 end section
 
 -- hint: rfl can prove 0 ≤ 0
@@ -97,6 +101,12 @@ lemma periodicity {f r} (hf : has_period f r) :
   ∀ m, has_period f (m*r) := by
   sorry
 
+-- omega/linarith could be useful
+lemma linear_structure {f : ℕ → ℕ}
+  (hf : ∀ x y, f (x + y) = f x + f y) :
+  ∃ c : ℕ, ∀ x, f x = c * x := by
+  sorry
+
 /- Calculations -/
 
 lemma diameter_of_radius {X : Type _} {d : X → X → ℝ}
@@ -109,6 +119,13 @@ lemma diameter_of_radius {X : Type _} {d : X → X → ℝ}
 -- use gcongr and Finset.sum_const
 lemma sum_one {n : ℕ} {f : ℕ → ℕ} (hf : ∀ x, f x ≥ 1) :
   ∑ i ∈ Finset.range n, f i ≥ n := by
+  sorry
+
+
+-- use Finset.sum_union and Finset.disjoint_sdiff
+lemma equal_partition_sum {S T : Finset ℕ} (hT : T ⊆ S)
+  (h : ∑ x ∈ T, x = ∑ x ∈ S \ T, x) :
+  2 * ∑ x ∈ T, x = ∑ x ∈ S, x := by
   sorry
 
 /- Longer proofs -/

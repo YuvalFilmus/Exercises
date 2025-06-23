@@ -56,6 +56,62 @@ lemma XOR_equiv :
       case inl hA' => right; constructor <;> assumption
       case inr hB' => contradiction
 
+
+lemma MAJ_equiv :
+  ((A ∧ B) ∨ (A ∧ C) ∨ (B ∧ C)) ↔ ((A ∨ B) ∧ (A ∨ C) ∧ (B ∨ C)) := by
+  constructor
+  case mp =>
+    intro h
+    cases h
+    case inl h =>
+      constructor
+      · left; exact h.1
+      constructor
+      · left; exact h.1
+      · left; exact h.2
+    case inr h =>
+    cases h
+    case inl h =>
+      constructor
+      · left; exact h.1
+      constructor
+      · left; exact h.1
+      · right; exact h.2
+    case inr h =>
+      constructor
+      · right; exact h.1
+      constructor
+      · right; exact h.2
+      · left; exact h.1
+  case mpr =>
+    intro h
+    obtain ⟨hAB,⟨hAC,hBC⟩⟩ := h
+    cases hAB
+    case inl hA =>
+      cases hBC
+      case inl hB =>
+        left
+        constructor
+        · exact hA
+        · exact hB
+      case inr hC =>
+        right; left
+        constructor
+        · exact hA
+        · exact hC
+    case inr hB =>
+      cases hAC
+      case inl hA =>
+        left
+        constructor
+        · exact hA
+        · exact hB
+      case inr hC =>
+        right; right
+        constructor
+        · exact hB
+        · exact hC
+
 end section
 
 lemma nonzero_of_pos {n : ℤ} (hn : n > 0) : n ≠ 0 := by
@@ -182,6 +238,22 @@ lemma periodicity {f r} (hf : has_period f r) :
     intro n
     rw [Nat.add_one_mul, ←add_assoc, hf, ih]
 
+-- omega/linarith could be useful
+lemma linear_structure {f : ℕ → ℕ}
+  (hf : ∀ x y, f (x + y) = f x + f y) :
+  ∃ c : ℕ, ∀ x, f x = c * x := by
+  use f 1
+  intro x
+  induction x
+  case zero =>
+    simp
+    have : f 0 = f 0 + f 0 := by
+      rw [←hf]
+    linarith
+  case succ x' ih =>
+    rw [hf, ih]
+    linarith
+
 /- Calculations -/
 
 lemma diameter_of_radius {X : Type _} {d : X → X → ℝ}
@@ -207,6 +279,21 @@ lemma sum_one {n : ℕ} {f : ℕ → ℕ} (hf : ∀ x, f x ≥ 1) :
       apply Finset.sum_const
     _ = n := by
       simp
+
+-- use Finset.sum_union and Finset.disjoint_sdiff
+lemma equal_partition_sum {S T : Finset ℕ} (hT : T ⊆ S)
+  (h : ∑ x ∈ T, x = ∑ x ∈ S \ T, x) :
+  2 * ∑ x ∈ T, x = ∑ x ∈ S, x := by
+  symm
+  trans ∑ x ∈ T, x + ∑ x ∈ S \ T, x
+  · convert_to ∑ x ∈ T ∪ (S \ T), id x = ∑ x ∈ T, id x + ∑ x ∈ S \ T, id x
+    · congr
+      simp
+      assumption
+    apply Finset.sum_union
+    exact Finset.disjoint_sdiff
+  · rw [←h]
+    omega
 
 /- Longer proofs -/
 
