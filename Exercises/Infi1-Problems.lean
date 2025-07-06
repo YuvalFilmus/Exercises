@@ -35,8 +35,26 @@ lemma infi1_targil1_problem3 {a b : ℝ} :
   sorry
 
 /-
- - TODO: parts a and b
+ - prove this by induction, using a strengthened induction hypothesis
+ - use Finset.prod_range_succ to unroll the product
+ - use mul_pos_iff and mul_neg_iff to reason about signs
+ - use mul_assoc to help with simplification
+ - use Nat.cast_le, Nat.cast_lt to lift Nat inequalities to Reals
+ - long and challenging exercise!
  -/
+lemma infi1_targil1_problem4a {x : ℝ} {n : ℕ} :
+  0 < ∏ i ∈ Finset.range (2*n+1), (x - (i + 1)) ↔
+  (∃ i < n, 2*i+1 < x ∧ x < 2*i+2) ∨ 2*n+1 < x := by
+  sorry
+
+/-
+ - split according to sign of various absolute values
+ - use appropriate lemmas and tactics to reason about square roots
+ - a rather long and challenging exercise!
+ -/
+lemma infi1_targil1_problem4b {x : ℝ} :
+  |2*x^2 - 5*x + 2| < |x+1| ↔ (3 - √7)/2 < x ∧ x < (3 + √7)/2 := by
+  sorry
 
 /-
  - split according to sign of various absolute values
