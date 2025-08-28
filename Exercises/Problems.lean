@@ -121,7 +121,6 @@ lemma sum_one {n : ℕ} {f : ℕ → ℕ} (hf : ∀ x, f x ≥ 1) :
   ∑ i ∈ Finset.range n, f i ≥ n := by
   sorry
 
-
 -- use Finset.sum_union and Finset.disjoint_sdiff
 lemma equal_partition_sum {S T : Finset ℕ} (hT : T ⊆ S)
   (h : ∑ x ∈ T, x = ∑ x ∈ S \ T, x) :
