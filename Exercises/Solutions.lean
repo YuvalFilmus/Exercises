@@ -24,6 +24,9 @@ lemma Implication2 : A → (A → B) → B := by
   intro hA
   intro hAToB
   exact hAToB hA
+  -- Could have also just written:
+  -- intro hA hAToB
+  -- instead of  intro hA; intro hAToB
 
 lemma Implication3 : (A → (B → C)) → ((A → B) → (A → C)) := by
   intro h₁ h₂ hA
@@ -33,17 +36,84 @@ lemma Implication3 : (A → (B → C)) → ((A → B) → (A → C)) := by
 lemma Or1 : A → A ∨ B := by
   intro hA
   left
-  exact hA
+  assumption -- Same as   exact hA   (Finds hA automatically)
 
-lemma And1 : A ∧ B → A ∨ B := by
+lemma Or2 : A ∨ A → A := by
+  intro hOr
+  cases hOr
+  case inl hA =>
+    exact hA
+  case inr hA =>
+    exact hA
+
+lemma AndOr1 : A ∧ B → A ∨ B := by
   intro hAAndB
   left
   exact hAAndB.left
 
-lemma Axiom4 : (¬ A → ¬ B) → (B → A) := by
-  intro h hB
-  contrapose! h
-  constructor <;> assumption
+lemma AndOr2 : A ∨ (A ∧ B) → A ∧ A := by
+  intro hOr
+  cases hOr
+  case inl hA =>
+    constructor
+    case left => exact hA
+    case right => exact hA
+  case inr hAAndB =>
+    constructor
+    case left => exact hAAndB.left
+    case right => exact hAAndB.left
+
+lemma Negation1 : A → ¬ A → False := by
+  intro hA hNotA
+  exact hNotA hA -- Could have also used:  contradiction
+
+lemma Negation2 : ¬ A → ¬ (A ∧ B) := by
+  intro hNotA
+  intro hAAndB -- ¬ (A ∧ B) is the same as (A ∧ B → False)
+  exact hNotA hAAndB.left
+  -- Another possible solution:
+  -- contrapose!
+  -- intro hAAndB
+  -- exact hAAndB.left
+
+lemma Negation3 : (A → B) → (¬ B → ¬ A) := by
+  intro hAToB hNotB
+  intro hA
+  apply hNotB
+  exact hAToB hA
+
+lemma Negation4 : (¬ A → ¬ B) → (B → A) := by
+  -- This one is hard to prove without using `contrapose!`
+  intro hAAndB
+  contrapose!
+  assumption
+  -- Another possible solution:
+  -- intro h hB
+  -- contrapose! h
+  -- constructor <;> assumption
+
+lemma Equiv1 : A ∨ B ↔ B ∨ A := by
+  constructor
+  case mp =>
+    intro hOr
+    cases hOr
+    case inl hA =>
+      right
+      assumption
+    case inr hA =>
+      left
+      assumption
+  -- This is just like the other case
+  case mpr =>
+    intro hOr
+    cases hOr
+    case inl hB =>
+      right
+      assumption
+    case inr hB =>
+      left
+      assumption
+
 
 lemma XOR_equiv :
   ((A ∧ ¬ B) ∨ (B ∧ ¬ A)) ↔ ((A ∨ B) ∧ (¬ A ∨ ¬ B)) := by
@@ -53,21 +123,21 @@ lemma XOR_equiv :
     cases h
     case inl h =>
       constructor
-      · left; exact h.1
-      · right; exact h.2
+      · left; exact h.left
+      · right; exact h.right
     case inr h =>
       constructor
-      · right; exact h.1
-      · left; exact h.2
+      · right; exact h.left
+      · left; exact h.right
   case mpr =>
     intro h
-    cases h.1
+    cases h.left
     case inl hA =>
-      cases h.2
+      cases h.right
       case inl hA' => contradiction
       case inr hB' => left; constructor <;> assumption
     case inr hB =>
-      cases h.2
+      cases h.right
       case inl hA' => right; constructor <;> assumption
       case inr hB' => contradiction
 
@@ -80,24 +150,24 @@ lemma MAJ_equiv :
     cases h
     case inl h =>
       constructor
-      · left; exact h.1
+      · left; exact h.left
       constructor
-      · left; exact h.1
-      · left; exact h.2
+      · left; exact h.left
+      · left; exact h.right
     case inr h =>
     cases h
     case inl h =>
       constructor
-      · left; exact h.1
+      · left; exact h.left
       constructor
-      · left; exact h.1
-      · right; exact h.2
+      · left; exact h.left
+      · right; exact h.right
     case inr h =>
       constructor
-      · right; exact h.1
+      · right; exact h.left
       constructor
-      · right; exact h.2
-      · left; exact h.1
+      · right; exact h.right
+      · left; exact h.left
   case mpr =>
     intro h
     obtain ⟨hAB,⟨hAC,hBC⟩⟩ := h

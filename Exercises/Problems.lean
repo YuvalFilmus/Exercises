@@ -30,13 +30,54 @@ lemma Implication3 : (A → (B → C)) → ((A → B) → (A → C)) := by
 lemma Or1 : A → A ∨ B := by
   sorry
 
-lemma Axiom4 : (¬ A → ¬ B) → (B → A) := by
-  -- Remember 
-  intro h₁
-  intro b
+lemma Or2 : A ∨ A → A := by
+  sorry
+
+lemma AndOr1 : A ∧ B → A ∨ B := by
+  sorry
+
+lemma AndOr2 : A ∨ (A ∧ B) → A ∧ A := by
+  sorry
+
+lemma Negation1 : A → ¬ A → False := by
+  sorry
+
+lemma Negation2 : ¬ A → ¬ (A ∧ B) := by
+  sorry
+
+lemma Negation3 : (A → B) → (¬ B → ¬ A) := by
+  sorry
+
+lemma Negation4 : (¬ A → ¬ B) → (B → A) := by
+  sorry
+
+lemma Equiv1 : A ∨ B ↔ B ∨ A := by
+  constructor
+  case mp =>
+    intro hOr
+    cases hOr
+    case inl hA =>
+      right
+      assumption
+    case inr hA =>
+      left
+      assumption
+  -- This is just like the other case
+  case mpr =>
+    intro hOr
+    cases hOr
+    case inl hB =>
+      right
+      assumption
+    case inr hB =>
+      left
+      assumption
+
+
 
 
 lemma XOR_equiv :
+  -- Read this signature carefully: Do you understand it?
   ((A ∧ ¬ B) ∨ (B ∧ ¬ A)) ↔ ((A ∨ B) ∧ (¬ A ∨ ¬ B)) := by
   sorry
 
