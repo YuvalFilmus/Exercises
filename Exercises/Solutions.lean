@@ -20,12 +20,17 @@ lemma Axiom1 : A → (B → A) := by
   intro hA _
   exact hA
 
-lemma Axiom2 : (A → (B → C)) → ((A → B) → (A → C)) := by
+lemma Axiom2 : A → (A → B) → B := by
+  intro hA
+  intro hAToB
+  exact hAToB hA
+
+lemma Axiom3 : (A → (B → C)) → ((A → B) → (A → C)) := by
   intro h₁ h₂ hA
   apply h₁ hA
   apply h₂ hA
 
-lemma Axiom3 : (¬ A → ¬ B) → (B → A) := by
+lemma Axiom4 : (¬ A → ¬ B) → (B → A) := by
   intro h hB
   contrapose! h
   constructor <;> assumption

@@ -21,10 +21,13 @@ variable {A B C : Prop}
 lemma Axiom1 : A → (B → A) := by
   sorry
 
-lemma Axiom2 : (A → (B → C)) → ((A → B) → (A → C)) := by
+lemma Axiom2 : A → (A → B) → B := by
   sorry
 
-lemma Axiom3 : (¬ A → ¬ B) → (B → A) := by
+lemma Axiom3 : (A → (B → C)) → ((A → B) → (A → C)) := by
+  sorry
+
+lemma Axiom4 : (¬ A → ¬ B) → (B → A) := by
   sorry
 
 lemma XOR_equiv :
