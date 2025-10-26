@@ -18,17 +18,23 @@ section
 
 variable {A B C : Prop}
 
-lemma Axiom1 : A → (B → A) := by
+lemma Implication1 : A → (B → A) := by
   sorry
 
-lemma Axiom2 : A → (A → B) → B := by
+lemma Implication2 : A → (A → B) → B := by
   sorry
 
-lemma Axiom3 : (A → (B → C)) → ((A → B) → (A → C)) := by
+lemma Implication3 : (A → (B → C)) → ((A → B) → (A → C)) := by
+  sorry
+
+lemma Or1 : A → A ∨ B := by
   sorry
 
 lemma Axiom4 : (¬ A → ¬ B) → (B → A) := by
-  sorry
+  -- Remember 
+  intro h₁
+  intro b
+
 
 lemma XOR_equiv :
   ((A ∧ ¬ B) ∨ (B ∧ ¬ A)) ↔ ((A ∨ B) ∧ (¬ A ∨ ¬ B)) := by

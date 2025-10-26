@@ -16,19 +16,29 @@ section
 
 variable {A B C : Prop}
 
-lemma Axiom1 : A → (B → A) := by
+lemma Implication1 : A → (B → A) := by
   intro hA _
   exact hA
 
-lemma Axiom2 : A → (A → B) → B := by
+lemma Implication2 : A → (A → B) → B := by
   intro hA
   intro hAToB
   exact hAToB hA
 
-lemma Axiom3 : (A → (B → C)) → ((A → B) → (A → C)) := by
+lemma Implication3 : (A → (B → C)) → ((A → B) → (A → C)) := by
   intro h₁ h₂ hA
   apply h₁ hA
   apply h₂ hA
+
+lemma Or1 : A → A ∨ B := by
+  intro hA
+  left
+  exact hA
+
+lemma And1 : A ∧ B → A ∨ B := by
+  intro hAAndB
+  left
+  exact hAAndB.left
 
 lemma Axiom4 : (¬ A → ¬ B) → (B → A) := by
   intro h hB
