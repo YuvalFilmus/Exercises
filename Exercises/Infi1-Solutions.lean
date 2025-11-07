@@ -28,7 +28,7 @@ lemma infi1_targil1_problem1 {a : ℝ} :
 
 /-
  - write a calculational proof (use calc)
- - use abs_suband abs_div
+ - use abs_sub and abs_div
  - tactics such as congr, gcongr, ring, norm_num are useful
  -/
 lemma infi1_targil1_problem2 {a x : ℝ}
