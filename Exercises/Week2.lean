@@ -60,8 +60,8 @@ lemma infi : ∀ ε, 0 < ε → ∃ δ, 0 < δ ∧ (f x - f (x + δ)) < ε := by
   sorry
 
 
-lemma lets_learn_about_simp (h : x = 10)
-: 0 <= 1 + x / 2 * 2 - 1 := by
+lemma lets_learn_about_simp (x : List ℝ) (h : x = [10, 20, 30])
+: (x ++ [40, 50]).length = 5 := by
   sorry
 
 
@@ -70,7 +70,7 @@ lemma lets_learn_about_simp (h : x = 10)
  - use abs_of_nonneg, abs_of_neg
  - tactics such as linarith and ring could be useful
  -/
-lemma infi1_targil1_problem1 {a : ℝ} :
+lemma absolute_fun {a : ℝ} :
   |a| = |a/2| + |a/2| := by
   sorry
 
