@@ -7,10 +7,11 @@ import Mathlib.Tactic
 
 
 /-
-In this file we will learn about more advanced techniques in lean, such as proof
-automation, rewriting, induction, and more.
-In this file you will learn the following tactics: `exact?`, `rw?`, `apply?`,
-`simp`, `linarith`, `induction` and `by_cases`.
+Hello, young Lean user.
+
+In this file you will learn about more advanced techniques in lean, such as proof
+automation, rewriting, induction, and more. You will learn the following tactics:
+`exact?`, `rw?`, `apply?`, `simp`, `linarith`, `induction` and `by_cases`.
 -/
 
 
