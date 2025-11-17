@@ -11,7 +11,7 @@ In this file, we will learn using programming concepts such as types and namespa
 to help us in defining mathematics, and to make proofs easy to construct.
 
 You will learn about: `namespace`, `inductive`, `structure`, `Type`, `Prop`
-`Subtype`, `class`, `Finset`, .
+`Subtype`, `class`, `Finset`.
 -/
 
 
@@ -87,7 +87,6 @@ structure IsBarber' {t : Town} (b : Resident t) where
 
 
 theorem solution : ∃ t, ∃ b : Resident t, IsBarber' b := by
-  -- Use `use` to specify `b`.
   let b : Person := { name := "Oleg" }
   let t : Town := {
     people := { b }
@@ -184,32 +183,32 @@ def Formula.eval {vars} (f : Formula vars) (a : Assignment vars) : Bool :=
 
 
 lemma var_or_not_var_eval_eq_true {v a}
-  : ((Formula.var v).or (Formula.var v).not).eval a = true := by
-    -- Giving `simp` the definition of `eval`, it manages to simplify it
-    -- completely.
-    simp [Formula.eval]
+: ((Formula.var v).or (Formula.var v).not).eval a = true := by
+  -- Giving `simp` the definition of `eval`, it manages to simplify it
+  -- completely.
+  simp [Formula.eval]
 
 
 lemma or_not_eval_eq_true {vars} {f : Formula vars} {a}
-  : (f.or f.not).eval a = true := by
-    -- Giving `simp` the definition of `eval`, it manages to simplify it
-    -- completely.
-    -- `simp [Formula.eval, Assignment.convert]`
-    -- But here is more brutal solution:
+: (f.or f.not).eval a = true := by
+  -- Giving `simp` the definition of `eval`, it manages to simplify it
+  -- completely.
+  -- `simp [Formula.eval, Assignment.convert]`
+  -- But here is more brutal solution:
+  unfold Formula.eval
+  simp
+  by_cases f.eval a.convert
+  case pos h =>
+    left
+    assumption
+  case neg h_not =>
+    replace h_not : f.eval a.convert = false := by
+      -- `exact?`
+      exact eq_false_of_ne_true h_not
+    right
     unfold Formula.eval
     simp
-    by_cases f.eval a.convert
-    case pos h =>
-      left
-      assumption
-    case neg h_not =>
-      replace h_not : f.eval a.convert = false := by
-        -- `exact?`
-        exact eq_false_of_ne_true h_not
-      right
-      unfold Formula.eval
-      simp
-      assumption
+    assumption
 
 
 lemma and_iff {x y h_x h_y a}
