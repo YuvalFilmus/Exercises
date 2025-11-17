@@ -23,7 +23,7 @@ You will learn about: `namespace`, `inductive`, `structure`, `Type`, `Prop`
 
 structure Person where
   name : String
-deriving DecidableEq
+-- deriving DecidableEq -- uncomment in case Lean complains
 
 
 structure Town where

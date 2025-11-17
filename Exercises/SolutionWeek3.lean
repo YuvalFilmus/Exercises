@@ -23,7 +23,6 @@ You will learn about: `namespace`, `inductive`, `structure`, `Type`, `Prop`
 
 structure Person where
   name : String
-deriving DecidableEq
 
 
 structure Town where
