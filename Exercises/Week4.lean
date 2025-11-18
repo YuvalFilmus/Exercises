@@ -21,6 +21,7 @@ index of the column mod 2), but is otherwise very similar.
 
 import Mathlib.Tactic
 
+noncomputable section
 open Classical Finset
 
 variable {n m : ℕ}
